@@ -5,8 +5,8 @@ project(GL)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
-include_directories(~/Desktop/GL/RTIMULib)
-include_directories(~/Desktop/GL/GLINface)
+include_directories(RTIMULib)
+include_directories(GLINface)
 
 file(GLOB GL GLINface/*.cpp GLINface/*.h)
 file(GLOB IMU RTIMULib/*.cpp RTIMULib/*.h)
