@@ -36,6 +36,19 @@ const char *RTFusion::m_fusionNameMap[] = {
     "Kalman STATE4",
     "RTQF"};
 
+
+void RTFusion::setGravityQuaternion()
+{
+	
+	double G = getGravity();
+	m_gravity.setScalar(0);
+    m_gravity.setX(0);
+    m_gravity.setY(0);
+    m_gravity.setZ(G);
+	
+}
+
+
 RTFusion::RTFusion()
 {
     m_debug = false;
@@ -44,17 +57,16 @@ RTFusion::RTFusion()
     m_enableAccel = true;
     m_enableCompass = true;
 
-    m_gravity.setScalar(0);
-    m_gravity.setX(0);
-    m_gravity.setY(0);
-    m_gravity.setZ(1);
+	setGravityQuaternion();
 
     m_slerpPower = RTQF_SLERP_POWER;
 }
 
+
 RTFusion::~RTFusion()
 {
 }
+
 
 void RTFusion::calculatePose(const RTVector3& accel, const RTVector3& mag, float magDeclination)
 {
@@ -121,11 +133,12 @@ RTVector3 RTFusion::getAccelResiduals()
     //  do gravity rotation and subtraction
 
     // create the conjugate of the pose
-
     fusedConjugate = m_fusionQPose.conjugate();
 
-    // now do the rotation - takes two steps with qTemp as the intermediate variable
+	// update curent gravity quaternion
+	setGravityQuaternion();
 
+    // now do the rotation - takes two steps with qTemp as the intermediate variable
     qTemp = m_gravity * m_fusionQPose;
     rotatedGravity = fusedConjugate * qTemp;
 
@@ -149,5 +162,29 @@ RTVector3 RTFusion::getAccelResiduals()
 	residuals.setZ(m.z());*/
 
     return residuals;
+}
+
+
+RTVector3 RTFusion::getAccel()
+{
+   
+    RTVector3 accel;
+
+    accel.setX(m_accel.x());
+    accel.setY(m_accel.y());
+    accel.setZ(m_accel.z());
+
+    return accel;
+}
+
+
+double RTFusion::getGravity()
+{
+   
+    RTVector3 gravity = getAccel();
+
+    double G = sqrt(gravity.x()*gravity.x() + gravity.y()*gravity.y() + gravity.z()*gravity.z());
+
+    return G;
 }
 

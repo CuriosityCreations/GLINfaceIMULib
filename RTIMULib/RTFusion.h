@@ -65,9 +65,17 @@ public:
     inline const RTVector3& getMeasuredPose() {return m_measuredPose;}
     inline const RTQuaternion& getMeasuredQPose() {return m_measuredQPose;}
 
-    //  getAccelResiduals() gets the residual after subtracting gravity
-
+    //--getAccelResiduals() gets the residual after subtracting gravity
     RTVector3 getAccelResiduals();
+
+	//--getAccel() gets the G sensor value
+	RTVector3 getAccel();
+
+	//--getGravity() gets G sensor magnitude
+	double  getGravity();
+
+	//--setGravityQuaternion() updates Gravity Quaternion by latest G sensor magnitude
+	void setGravityQuaternion();
 
     void setDebugEnable(bool enable) { m_debug = enable; }
 
