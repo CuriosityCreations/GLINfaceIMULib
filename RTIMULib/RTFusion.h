@@ -68,11 +68,14 @@ public:
     //--getAccelResiduals() gets the residual after subtracting gravity
     RTVector3 getAccelResiduals();
 
+	//--World accel residuals
+	RTVector3 WorldAccelResiduals();
+
 	//--getAccel() gets the G sensor value
 	RTVector3 getAccel();
 
 	//--getGravity() gets G sensor magnitude
-	double  getGravity();
+	double  getGsense();
 
 	//--setGravityQuaternion() updates Gravity Quaternion by latest G sensor magnitude
 	void setGravityQuaternion();

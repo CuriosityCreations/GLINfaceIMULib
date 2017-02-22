@@ -40,7 +40,7 @@ const char *RTFusion::m_fusionNameMap[] = {
 void RTFusion::setGravityQuaternion()
 {
 	
-	double G = getGravity();
+	double G = getGsense();
 	m_gravity.setScalar(0);
     m_gravity.setX(0);
     m_gravity.setY(0);
@@ -125,7 +125,7 @@ void RTFusion::calculatePose(const RTVector3& accel, const RTVector3& mag, float
 RTVector3 RTFusion::getAccelResiduals()
 {
     RTQuaternion rotatedGravity;
-	RTQuaternion rotatedm;
+
     RTQuaternion fusedConjugate;
     RTQuaternion qTemp;
     RTVector3 residuals;
@@ -148,20 +148,38 @@ RTVector3 RTFusion::getAccelResiduals()
     residuals.setY(-(m_accel.y() - rotatedGravity.y()));
     residuals.setZ(-(m_accel.z() - rotatedGravity.z()));
 
-	/*RTQuaternion m;
-	m.setScalar(0);
-    m.setX(residuals.x());
-    m.setY(residuals.y());
-    m.setZ(residuals.z());
-
-	qTemp = m * m_fusionQPose;
-    rotatedm = fusedConjugate * qTemp;
-	
-	residuals.setX(m.x());
-	residuals.setY(m.y());
-	residuals.setZ(m.z());*/
 
     return residuals;
+}
+
+
+RTVector3 RTFusion::WorldAccelResiduals()
+{	
+	RTQuaternion worldaccel;
+	RTQuaternion qTemp;
+	RTQuaternion Qresiduals;
+	RTQuaternion fusedConjugate;
+	
+	RTVector3 residuals = getAccelResiduals();
+	RTVector3 worldresiduals;
+
+	fusedConjugate = m_fusionQPose.conjugate();
+	
+	Qresiduals.setScalar(0);
+    Qresiduals.setX(residuals.x());
+    Qresiduals.setY(residuals.y());
+    Qresiduals.setZ(residuals.z());
+
+	//--Rotate the accel direction to world
+	qTemp = Qresiduals * m_fusionQPose;
+    worldaccel = fusedConjugate * qTemp;
+	
+	worldresiduals.setX(worldaccel.x());
+	worldresiduals.setY(worldaccel.y());
+	worldresiduals.setZ(worldaccel.z());
+
+	return worldresiduals;
+
 }
 
 
@@ -178,7 +196,7 @@ RTVector3 RTFusion::getAccel()
 }
 
 
-double RTFusion::getGravity()
+double RTFusion::getGsense()
 {
    
     RTVector3 gravity = getAccel();
