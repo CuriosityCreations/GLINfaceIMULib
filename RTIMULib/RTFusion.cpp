@@ -42,9 +42,9 @@ void RTFusion::setGravityQuaternion()
 	
 	double G = getGsense();
 	m_gravity.setScalar(0);
-    m_gravity.setX(0);
-    m_gravity.setY(0);
-    m_gravity.setZ(G);
+	m_gravity.setX(0);
+	m_gravity.setY(0);
+	m_gravity.setZ(G);
 	
 }
 
