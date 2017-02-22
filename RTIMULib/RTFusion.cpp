@@ -40,11 +40,11 @@ const char *RTFusion::m_fusionNameMap[] = {
 void RTFusion::setGravityQuaternion()
 {
 	
-	double G = getGsense();
-	m_gravity.setScalar(0);
-	m_gravity.setX(0);
-	m_gravity.setY(0);
-	m_gravity.setZ(G);
+    double G = getGsense();
+    m_gravity.setScalar(0);
+    m_gravity.setX(0);
+    m_gravity.setY(0);
+    m_gravity.setZ(G);
 	
 }
 
@@ -135,8 +135,8 @@ RTVector3 RTFusion::getAccelResiduals()
     // create the conjugate of the pose
     fusedConjugate = m_fusionQPose.conjugate();
 
-	// update curent gravity quaternion
-	setGravityQuaternion();
+    // update curent gravity quaternion
+    setGravityQuaternion();
 
     // now do the rotation - takes two steps with qTemp as the intermediate variable
     qTemp = m_gravity * m_fusionQPose;
@@ -155,30 +155,30 @@ RTVector3 RTFusion::getAccelResiduals()
 
 RTVector3 RTFusion::WorldAccelResiduals()
 {	
-	RTQuaternion worldaccel;
-	RTQuaternion qTemp;
-	RTQuaternion Qresiduals;
-	RTQuaternion fusedConjugate;
+    RTQuaternion worldaccel;
+    RTQuaternion qTemp;
+    RTQuaternion Qresiduals;
+    RTQuaternion fusedConjugate;
 	
-	RTVector3 residuals = getAccelResiduals();
-	RTVector3 worldresiduals;
+    RTVector3 residuals = getAccelResiduals();
+    RTVector3 worldresiduals;
 
-	fusedConjugate = m_fusionQPose.conjugate();
+    fusedConjugate = m_fusionQPose.conjugate();
 	
-	Qresiduals.setScalar(0);
+    Qresiduals.setScalar(0);
     Qresiduals.setX(residuals.x());
     Qresiduals.setY(residuals.y());
     Qresiduals.setZ(residuals.z());
 
-	//--Rotate the accel direction to world
-	qTemp = Qresiduals * m_fusionQPose;
+    //--Rotate the accel direction to world
+    qTemp = Qresiduals * m_fusionQPose;
     worldaccel = fusedConjugate * qTemp;
 	
-	worldresiduals.setX(worldaccel.x());
-	worldresiduals.setY(worldaccel.y());
-	worldresiduals.setZ(worldaccel.z());
+    worldresiduals.setX(worldaccel.x());
+    worldresiduals.setY(worldaccel.y());
+    worldresiduals.setZ(worldaccel.z());
 
-	return worldresiduals;
+    return worldresiduals;
 
 }
 
