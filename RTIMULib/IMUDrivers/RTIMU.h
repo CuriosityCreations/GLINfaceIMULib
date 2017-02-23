@@ -28,6 +28,7 @@
 #include "RTFusion.h"
 #include "RTIMULibDefs.h"
 #include "RTIMUSettings.h"
+#include "RTIMUGravityCal.h"
 
 //  Axis rotation defs
 //
@@ -158,7 +159,8 @@ public:
     const RTVector3& getAccel() { return m_imuData.accel; } // get accel data in gs
     const RTVector3& getCompass() { return m_imuData.compass; } // gets compass data in uT
 
-    RTVector3 getAccelResiduals() { return m_fusion->getAccelResiduals(); }
+    RTVector3 getAccelResiduals() { return m_gravity->getAccelResiduals(); }
+    RTVector3 WorldAccelResiduals() { return m_gravity->WorldAccelResiduals(); }
 
 protected:
     void gyroBiasInit();                                    // sets up gyro bias calculation
@@ -175,6 +177,8 @@ protected:
     RTIMUSettings *m_settings;                              // the settings object pointer
 
     RTFusion *m_fusion;                                     // the fusion algorithm
+
+    RTIMUGravityCal *m_gravity;                             // gravity caliberation
 
     int m_sampleRate;                                       // samples per second
     uint64_t m_sampleInterval;                              // interval between samples in microseonds
