@@ -37,18 +37,6 @@ const char *RTFusion::m_fusionNameMap[] = {
     "RTQF"};
 
 
-void RTFusion::setGravityQuaternion()
-{
-	
-    double G = getGsense();
-    m_gravity.setScalar(0);
-    m_gravity.setX(0);
-    m_gravity.setY(0);
-    m_gravity.setZ(G);
-	
-}
-
-
 RTFusion::RTFusion()
 {
     m_debug = false;
@@ -56,8 +44,6 @@ RTFusion::RTFusion()
     m_enableGyro = true;
     m_enableAccel = true;
     m_enableCompass = true;
-
-	setGravityQuaternion();
 
     m_slerpPower = RTQF_SLERP_POWER;
 }
@@ -119,67 +105,6 @@ void RTFusion::calculatePose(const RTVector3& accel, const RTVector3& mag, float
         m_measuredQPose.setZ(-m_measuredQPose.z());
         m_measuredQPose.toEuler(m_measuredPose);
     }
-}
-
-
-RTVector3 RTFusion::getAccelResiduals()
-{
-    RTQuaternion rotatedGravity;
-
-    RTQuaternion fusedConjugate;
-    RTQuaternion qTemp;
-    RTVector3 residuals;
-
-    //  do gravity rotation and subtraction
-
-    // create the conjugate of the pose
-    fusedConjugate = m_fusionQPose.conjugate();
-
-    // update curent gravity quaternion
-    setGravityQuaternion();
-
-    // now do the rotation - takes two steps with qTemp as the intermediate variable
-    qTemp = m_gravity * m_fusionQPose;
-    rotatedGravity = fusedConjugate * qTemp;
-
-    // now adjust the measured accel and change the signs to make sense
-
-    residuals.setX(-(m_accel.x() - rotatedGravity.x()));
-    residuals.setY(-(m_accel.y() - rotatedGravity.y()));
-    residuals.setZ(-(m_accel.z() - rotatedGravity.z()));
-
-
-    return residuals;
-}
-
-
-RTVector3 RTFusion::WorldAccelResiduals()
-{	
-    RTQuaternion worldaccel;
-    RTQuaternion qTemp;
-    RTQuaternion Qresiduals;
-    RTQuaternion fusedConjugate;
-	
-    RTVector3 residuals = getAccelResiduals();
-    RTVector3 worldresiduals;
-
-    fusedConjugate = m_fusionQPose.conjugate();
-	
-    Qresiduals.setScalar(0);
-    Qresiduals.setX(residuals.x());
-    Qresiduals.setY(residuals.y());
-    Qresiduals.setZ(residuals.z());
-
-    //--Rotate the accel direction to world
-    qTemp = Qresiduals * m_fusionQPose;
-    worldaccel = fusedConjugate * qTemp;
-	
-    worldresiduals.setX(worldaccel.x());
-    worldresiduals.setY(worldaccel.y());
-    worldresiduals.setZ(worldaccel.z());
-
-    return worldresiduals;
-
 }
 
 

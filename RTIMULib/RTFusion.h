@@ -65,22 +65,15 @@ public:
     inline const RTVector3& getMeasuredPose() {return m_measuredPose;}
     inline const RTQuaternion& getMeasuredQPose() {return m_measuredQPose;}
 
-    //--getAccelResiduals() gets the residual after subtracting gravity
-    RTVector3 getAccelResiduals();
-
-	//--World accel residuals
-	RTVector3 WorldAccelResiduals();
-
 	//--getAccel() gets the G sensor value
 	RTVector3 getAccel();
 
 	//--getGravity() gets G sensor magnitude
 	double  getGsense();
 
-	//--setGravityQuaternion() updates Gravity Quaternion by latest G sensor magnitude
-	void setGravityQuaternion();
-
     void setDebugEnable(bool enable) { m_debug = enable; }
+
+	RTQuaternion getfusionQPose(){return m_fusionQPose;}
 
 protected:
     void calculatePose(const RTVector3& accel, const RTVector3& mag, float magDeclination); // generates pose from accels and mag
