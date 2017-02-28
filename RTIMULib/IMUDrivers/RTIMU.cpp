@@ -164,6 +164,9 @@ RTIMU::RTIMU(RTIMUSettings *settings)
         break;
     }
     HAL_INFO1("Using fusion algorithm %s\n", RTFusion::fusionName(m_settings->m_fusionType));
+
+
+    m_gravity = new RTIMUGravityCal();
 }
 
 RTIMU::~RTIMU()
@@ -480,3 +483,10 @@ bool RTIMU::IMUGyroBiasValid()
      m_imuData.timestamp = timestamp;
      updateFusion();
 }
+
+
+void RTIMU::updateGravity()
+{
+    m_gravity->newIMUData(m_imuData, m_settings);
+}
+

@@ -159,8 +159,9 @@ public:
     const RTVector3& getAccel() { return m_imuData.accel; } // get accel data in gs
     const RTVector3& getCompass() { return m_imuData.compass; } // gets compass data in uT
 
-    RTVector3 getAccelResiduals() { return m_gravity->getAccelResiduals(); }
-    RTVector3 WorldAccelResiduals() { return m_gravity->WorldAccelResiduals(); }
+    double getGsense() {updateGravity(); return m_gravity->getGsense();}
+    //RTVector3 getAccelResiduals() { return m_gravity->getAccelResiduals(); }
+    /*RTVector3 WorldAccelResiduals() { return m_gravity->WorldAccelResiduals(); }*/
 
 protected:
     void gyroBiasInit();                                    // sets up gyro bias calculation
@@ -168,6 +169,7 @@ protected:
     void calibrateAverageCompass();                         // calibrate and smooth compass
     void calibrateAccel();                                  // calibrate the accelerometers
     void updateFusion();                                    // call when new data to update fusion state
+    void updateGravity();                                   // call when new data to update gravity state
 
     bool m_compassCalibrationMode;                          // true if cal mode so don't use cal data!
     bool m_accelCalibrationMode;                            // true if cal mode so don't use cal data!

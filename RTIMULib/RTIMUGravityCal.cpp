@@ -1,17 +1,66 @@
 #include "RTIMUGravityCal.h"
-#include <vector>
+#include "RTIMUSettings.h"
+
 using namespace std;
 
-void RTIMUGravityCal::setGravityQuaternion(){
+RTIMUGravityCal::RTIMUGravityCal(){
+   reset();
+
+}
+
+
+void RTIMUGravityCal::reset(){
+
+    m_firsttime = true;
+    m_accel = RTVector3();
+    m_gravity = RTQuaternion();
+
+}
+
+
+void RTIMUGravityCal::newIMUData(RTIMU_DATA& data, const RTIMUSettings *settings){
+
+    m_accel = data.accel;
+    
+
+}
+
+
+RTVector3 RTIMUGravityCal::getAccel()
+{
+   
+    RTVector3 accel;
+
+    accel.setX(m_accel.x());
+    accel.setY(m_accel.y());
+    accel.setZ(m_accel.z());
+
+    return accel;
+}
+
+
+double RTIMUGravityCal::getGsense()
+{
+   
+    RTVector3 gravity = getAccel();
+
+    double G = sqrt(gravity.x()*gravity.x() + gravity.y()*gravity.y() + gravity.z()*gravity.z());
+
+    return G;
+}
+
+
+
+/*void RTIMUGravityCal::setGravityQuaternion(){
     double G = GetGravity();
     m_gravity.setScalar(0);
     m_gravity.setX(0);
     m_gravity.setY(0);
     m_gravity.setZ(G);
-}
+}*/
 
 
-RTVector3 RTIMUGravityCal::getAccelResiduals(){
+/*RTVector3 RTIMUGravityCal::getAccelResiduals(){
 	RTQuaternion rotatedGravity;
     RTQuaternion fusedConjugate;
     RTQuaternion fusionQPose;
@@ -40,9 +89,9 @@ RTVector3 RTIMUGravityCal::getAccelResiduals(){
 
 
     return residuals;
-}
+}*/
 
-RTVector3 RTIMUGravityCal::WorldAccelResiduals(){
+/*RTVector3 RTIMUGravityCal::WorldAccelResiduals(){
 	RTQuaternion worldaccel;
     RTQuaternion qTemp;
     RTQuaternion fusionQPose;
@@ -69,4 +118,4 @@ RTVector3 RTIMUGravityCal::WorldAccelResiduals(){
     worldresiduals.setZ(worldaccel.z());
 
     return worldresiduals;
-}
+}*/

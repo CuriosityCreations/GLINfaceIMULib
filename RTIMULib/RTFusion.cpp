@@ -107,27 +107,3 @@ void RTFusion::calculatePose(const RTVector3& accel, const RTVector3& mag, float
     }
 }
 
-
-RTVector3 RTFusion::getAccel()
-{
-   
-    RTVector3 accel;
-
-    accel.setX(m_accel.x());
-    accel.setY(m_accel.y());
-    accel.setZ(m_accel.z());
-
-    return accel;
-}
-
-
-double RTFusion::getGsense()
-{
-   
-    RTVector3 gravity = getAccel();
-
-    double G = sqrt(gravity.x()*gravity.x() + gravity.y()*gravity.y() + gravity.z()*gravity.z());
-
-    return G;
-}
-

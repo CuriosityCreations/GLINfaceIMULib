@@ -388,14 +388,14 @@ void display(){
 	GLInface.theAxis();
 	GLInface.drawCube(4.0);
 	
-	RTVector3 imuData = imu->getAccelResiduals();
+	double imuData = imu->getGsense();
 	RTVector3 imuPoseData = imu->getMeasuredPose();
 
 	if(imu->IMURead()){
-		printf("Accel: 	x %.4f y %.4f z %.4f\n", imuData.x(), imuData.y(), imuData.z());
+		printf("Accel: 	x %.4f y %.4f z %.4f\n", imuData, imuData, imuData);
 	}
 
-	filter4(imuData, imuPoseData);
+	//filter4(imuData, imuPoseData);
     //filter2(imuData, imuPoseData);
     //filter3(imuData, imuPoseData);
 	

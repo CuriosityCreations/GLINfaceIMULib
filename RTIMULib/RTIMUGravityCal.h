@@ -8,24 +8,22 @@ using namespace std;
 class RTIMUGravityCal
 {
 public:
-    //--get original fusion acceleration value
-	RTVector3 getFusionAccel() {return m_fusion->getAccel();}
+    RTIMUGravityCal();
+    ~RTIMUGravityCal();
 
-	//--get Gravity
-	double GetGravity() {return m_fusion->getGsense();}
+    void newIMUData(RTIMU_DATA& data, const RTIMUSettings *settings);
+	void reset();
 
-    //--gravity quaternion
-	void setGravityQuaternion();
+    //--getAccel() gets the G sensor value
+	RTVector3 getAccel();
 
-    //--getAccelResiduals() gets the residual after subtracting gravity
-    RTVector3 getAccelResiduals();
-
-    RTVector3 WorldAccelResiduals();
-
+	//--getGravity() gets G sensor magnitude
+	double  getGsense();
+    
 protected:
-	RTFusion *m_fusion;                                  // the fusion algorithm
-    RTQuaternion m_gravity;                              // gravity Quaternion
-    RTVector3 m_accel;                                   //
+    bool m_firsttime;                                  // first time execute flag
+    RTQuaternion m_gravity;                            // gravity Quaternion
+    RTVector3 m_accel;                                 // get the acceleration
 	vector<double> Gstastic;
 
 };

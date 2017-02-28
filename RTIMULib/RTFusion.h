@@ -65,12 +65,6 @@ public:
     inline const RTVector3& getMeasuredPose() {return m_measuredPose;}
     inline const RTQuaternion& getMeasuredQPose() {return m_measuredQPose;}
 
-	//--getAccel() gets the G sensor value
-	RTVector3 getAccel();
-
-	//--getGravity() gets G sensor magnitude
-	double  getGsense();
-
     void setDebugEnable(bool enable) { m_debug = enable; }
 
 	RTQuaternion getfusionQPose(){return m_fusionQPose;}
